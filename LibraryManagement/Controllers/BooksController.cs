@@ -1,4 +1,5 @@
 ﻿using LibraryManagement.DTOs.Books;
+using LibraryManagement.Models.Enums;
 using LibraryManagement.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -19,6 +20,7 @@ namespace LibraryManagement.Controllers
 
         // GET: api/books
         [HttpGet]
+        [Authorize(Roles = "Administrator,Librarian,Staff")]
         public async Task<IActionResult> GetAll()
         {
             var books = await _bookService.GetAllAsync();
@@ -28,6 +30,7 @@ namespace LibraryManagement.Controllers
 
         // GET: api/books/5
         [HttpGet("{id:int}")]
+        [Authorize(Roles = "Administrator,Librarian,Staff")]
         public async Task<IActionResult> GetById(int id)
         {
             var book = await _bookService.GetByIdAsync(id);
@@ -123,6 +126,32 @@ namespace LibraryManagement.Controllers
             {
                 message = "Book deleted successfully."
             });
+        }
+
+        [HttpGet("search")]
+        [Authorize(Roles = "Administrator,Librarian,Staff")]
+        public async Task<IActionResult> Search(
+    [FromQuery] string? name,
+    [FromQuery] int? authorId,
+    [FromQuery] int? categoryId)
+        {
+            var books = await _bookService.SearchAsync(
+                name,
+                authorId,
+                categoryId);
+
+            return Ok(books);
+        }
+
+        [HttpGet("status/{status}")]
+        [Authorize(Roles = "Administrator,Librarian,Staff")]
+        public async Task<IActionResult> GetByStatus(
+    BookStatus status)
+        {
+            var books =
+                await _bookService.GetByStatusAsync(status);
+
+            return Ok(books);
         }
     }
 }

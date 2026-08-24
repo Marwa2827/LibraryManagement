@@ -1,8 +1,10 @@
 ﻿using LibraryManagement.DTOs.Auth;
 using LibraryManagement.Models.Entities;
 using LibraryManagement.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace LibraryManagement.Controllers
 {
@@ -82,6 +84,34 @@ namespace LibraryManagement.Controllers
             };
 
             return Ok(response);
+        }
+
+        [HttpPost("logout")]
+        [Authorize]
+        public async Task<IActionResult> Logout()
+        {
+            var userIdClaim =
+                User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (!int.TryParse(userIdClaim, out var userId))
+            {
+                return Unauthorized(new
+                {
+                    message = "Invalid user token."
+                });
+            }
+
+            await _activityLogService.LogAsync(
+                userId,
+                "Logout",
+                "ApplicationUser",
+                userId,
+                HttpContext.Connection.RemoteIpAddress?.ToString());
+
+            return Ok(new
+            {
+                message = "Logout successful."
+            });
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using LibraryManagement.Data;
 using LibraryManagement.DTOs.Books;
 using LibraryManagement.Models.Entities;
+using LibraryManagement.Models.Enums;
 using LibraryManagement.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -330,5 +331,118 @@ namespace LibraryManagement.Services.Implementations
 
             return (true, null);
         }
+        public async Task<List<BookResponseDto>> SearchAsync(
+    string? name,
+    int? authorId,
+    int? categoryId)
+        {
+            var query = _context.Books
+                .AsNoTracking()
+                .Include(b => b.Publisher)
+                .Include(b => b.Category)
+                .Include(b => b.BookAuthors)
+                    .ThenInclude(ba => ba.Author)
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(name))
+            {
+                name = name.Trim();
+
+                query = query.Where(b =>
+                    b.Title.Contains(name));
+            }
+
+            if (authorId.HasValue)
+            {
+                query = query.Where(b =>
+                    b.BookAuthors.Any(
+                        ba => ba.AuthorId == authorId.Value));
+            }
+
+            if (categoryId.HasValue)
+            {
+                query = query.Where(b =>
+                    b.CategoryId == categoryId.Value);
+            }
+
+            var books = await query.ToListAsync();
+
+            return books.Select(b => new BookResponseDto
+            {
+                Id = b.Id,
+                Title = b.Title,
+                ISBN = b.ISBN,
+                Edition = b.Edition,
+                Summary = b.Summary,
+                Language = b.Language,
+                PublicationYear = b.PublicationYear,
+
+                CoverImageUrl =
+                    _fileService.GetBookCoverUrl(b.CoverImage),
+
+                Status = b.Status,
+
+                PublisherId = b.PublisherId,
+                PublisherName = b.Publisher.Name,
+
+                CategoryId = b.CategoryId,
+                CategoryName = b.Category.Name,
+
+                AuthorIds = b.BookAuthors
+                    .Select(ba => ba.AuthorId)
+                    .ToList(),
+
+                AuthorNames = b.BookAuthors
+                    .Select(ba => ba.Author.Name)
+                    .ToList()
+
+            }).ToList();
+        }
+
+
+        public async Task<List<BookResponseDto>> GetByStatusAsync(
+            BookStatus status)
+        {
+            var books = await _context.Books
+                .AsNoTracking()
+                .Include(b => b.Publisher)
+                .Include(b => b.Category)
+                .Include(b => b.BookAuthors)
+                    .ThenInclude(ba => ba.Author)
+                .Where(b => b.Status == status)
+                .ToListAsync();
+
+            return books.Select(b => new BookResponseDto
+            {
+                Id = b.Id,
+                Title = b.Title,
+                ISBN = b.ISBN,
+                Edition = b.Edition,
+                Summary = b.Summary,
+                Language = b.Language,
+                PublicationYear = b.PublicationYear,
+
+                CoverImageUrl =
+                    _fileService.GetBookCoverUrl(b.CoverImage),
+
+                Status = b.Status,
+
+                PublisherId = b.PublisherId,
+                PublisherName = b.Publisher.Name,
+
+                CategoryId = b.CategoryId,
+                CategoryName = b.Category.Name,
+
+                AuthorIds = b.BookAuthors
+                    .Select(ba => ba.AuthorId)
+                    .ToList(),
+
+                AuthorNames = b.BookAuthors
+                    .Select(ba => ba.Author.Name)
+                    .ToList()
+
+            }).ToList();
+        }
+
     }
 }

@@ -18,12 +18,14 @@ namespace LibraryManagement.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Administrator,Librarian,Staff")]
         public async Task<IActionResult> GetAll()
         {
             return Ok(await _memberService.GetAllAsync());
         }
 
         [HttpGet("{id:int}")]
+        [Authorize(Roles = "Administrator,Librarian,Staff")]
         public async Task<IActionResult> GetById(int id)
         {
             var member = await _memberService.GetByIdAsync(id);

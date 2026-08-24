@@ -1,4 +1,5 @@
 ﻿using LibraryManagement.DTOs.Books;
+using LibraryManagement.Models.Enums;
 
 namespace LibraryManagement.Services.Interfaces
 {
@@ -16,5 +17,9 @@ namespace LibraryManagement.Services.Interfaces
 
         Task<(bool Success, string? Error)>
             DeleteAsync(int id);
+
+        Task<List<BookResponseDto>> SearchAsync(string? name, int? authorId, int? categoryId);
+
+        Task<List<BookResponseDto>> GetByStatusAsync(BookStatus status);
     }
 }
