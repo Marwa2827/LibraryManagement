@@ -12,11 +12,13 @@ namespace LibraryManagement.Controllers
     public class BorrowingsController : ControllerBase
     {
         private readonly IBorrowingService _borrowingService;
+        private readonly IUserActivityLogService _activityLogService;
 
-        public BorrowingsController(
-            IBorrowingService borrowingService)
+        public BorrowingsController(IBorrowingService borrowingService,
+            IUserActivityLogService activityLogService)
         {
             _borrowingService = borrowingService;
+            _activityLogService = activityLogService;
         }
 
         // GET: api/Borrowings
@@ -78,6 +80,13 @@ namespace LibraryManagement.Controllers
                 });
             }
 
+            await _activityLogService.LogAsync(
+                userId.Value,
+                "Borrow Book",
+                "Borrowing",
+                result.Borrowing!.Id,
+                HttpContext.Connection.RemoteIpAddress?.ToString());
+
             return CreatedAtAction(
                 nameof(GetById),
                 new { id = result.Borrowing!.Id },
@@ -119,6 +128,13 @@ namespace LibraryManagement.Controllers
                     message = result.Error
                 });
             }
+
+            await _activityLogService.LogAsync(
+                userId.Value,
+                "Return Book",
+                "Borrowing",
+                id,
+                HttpContext.Connection.RemoteIpAddress?.ToString());
 
             return Ok(new
             {

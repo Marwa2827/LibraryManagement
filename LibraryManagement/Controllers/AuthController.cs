@@ -12,11 +12,14 @@ namespace LibraryManagement.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IJwtService _jwtService;
+        private readonly IUserActivityLogService _activityLogService;
 
-        public AuthController(UserManager<ApplicationUser> userManager,IJwtService jwtService)
+        public AuthController(UserManager<ApplicationUser> userManager
+            ,IJwtService jwtService,IUserActivityLogService activityLogService)
         {
             _userManager = userManager;
             _jwtService = jwtService;
+            _activityLogService = activityLogService;
         }
 
         [HttpPost("login")]
@@ -60,6 +63,13 @@ namespace LibraryManagement.Controllers
             var result = await _jwtService.GenerateTokenAsync(user);
 
             var roles = await _userManager.GetRolesAsync(user);
+
+            await _activityLogService.LogAsync(
+                user.Id,
+                "Login",
+                "ApplicationUser",
+                user.Id,
+                HttpContext.Connection.RemoteIpAddress?.ToString());
 
             var response = new LoginResponseDto
             {

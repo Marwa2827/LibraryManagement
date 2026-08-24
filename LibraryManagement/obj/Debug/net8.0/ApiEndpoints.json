@@ -559,6 +559,16 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "LibraryManagement.Controllers.UserActivityLogsController",
+    "Method": "GetAll",
+    "RelativePath": "api/UserActivityLogs",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "LibraryManagement.Controllers.UsersController",
     "Method": "GetAll",
     "RelativePath": "api/Users",

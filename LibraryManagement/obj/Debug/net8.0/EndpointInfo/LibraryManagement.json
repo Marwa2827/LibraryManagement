@@ -900,6 +900,18 @@
         }
       }
     },
+    "/api/UserActivityLogs": {
+      "get": {
+        "tags": [
+          "UserActivityLogs"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/Users": {
       "get": {
         "tags": [
