@@ -113,9 +113,54 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "dto",
-        "Type": "LibraryManagement.DTOs.Books.CreateBookDto",
-        "IsRequired": true
+        "Name": "Title",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ISBN",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Edition",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Summary",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Language",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "PublicationYear",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "CoverImage",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      },
+      {
+        "Name": "PublisherId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "CategoryId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "AuthorIds",
+        "Type": "System.Collections.Generic.List\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []
@@ -150,9 +195,54 @@
         "IsRequired": true
       },
       {
-        "Name": "dto",
-        "Type": "LibraryManagement.DTOs.Books.UpdateBookDto",
-        "IsRequired": true
+        "Name": "Title",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ISBN",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Edition",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Summary",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Language",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "PublicationYear",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "CoverImage",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      },
+      {
+        "Name": "PublisherId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "CategoryId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "AuthorIds",
+        "Type": "System.Collections.Generic.List\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []
@@ -162,6 +252,64 @@
     "Method": "Delete",
     "RelativePath": "api/Books/{id}",
     "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LibraryManagement.Controllers.BorrowingsController",
+    "Method": "GetAll",
+    "RelativePath": "api/Borrowings",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LibraryManagement.Controllers.BorrowingsController",
+    "Method": "Borrow",
+    "RelativePath": "api/Borrowings",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "LibraryManagement.DTOs.Borrowings.CreateBorrowingDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LibraryManagement.Controllers.BorrowingsController",
+    "Method": "GetById",
+    "RelativePath": "api/Borrowings/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LibraryManagement.Controllers.BorrowingsController",
+    "Method": "Return",
+    "RelativePath": "api/Borrowings/{id}/return",
+    "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
@@ -240,6 +388,85 @@
     "ContainingType": "LibraryManagement.Controllers.CategoriesController",
     "Method": "Delete",
     "RelativePath": "api/Categories/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LibraryManagement.Controllers.MembersController",
+    "Method": "GetAll",
+    "RelativePath": "api/Members",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LibraryManagement.Controllers.MembersController",
+    "Method": "Create",
+    "RelativePath": "api/Members",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "LibraryManagement.DTOs.Members.CreateMemberDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LibraryManagement.Controllers.MembersController",
+    "Method": "GetById",
+    "RelativePath": "api/Members/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LibraryManagement.Controllers.MembersController",
+    "Method": "Update",
+    "RelativePath": "api/Members/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "dto",
+        "Type": "LibraryManagement.DTOs.Members.UpdateMemberDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LibraryManagement.Controllers.MembersController",
+    "Method": "Delete",
+    "RelativePath": "api/Members/{id}",
     "HttpMethod": "DELETE",
     "IsController": true,
     "Order": 0,

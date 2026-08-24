@@ -18,7 +18,7 @@ namespace LibraryManagement.DTOs.Books
 
         public int PublicationYear { get; set; }
 
-        public string? CoverImage { get; set; }
+        public string? CoverImageUrl { get; set; }
 
         public BookStatus Status { get; set; }
 

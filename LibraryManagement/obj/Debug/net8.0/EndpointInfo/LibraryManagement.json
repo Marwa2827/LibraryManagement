@@ -178,19 +178,95 @@
         ],
         "requestBody": {
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
-                "$ref": "#/components/schemas/CreateBookDto"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateBookDto"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateBookDto"
+                "required": [
+                  "AuthorIds",
+                  "CategoryId",
+                  "ISBN",
+                  "Language",
+                  "PublisherId",
+                  "Title"
+                ],
+                "type": "object",
+                "properties": {
+                  "Title": {
+                    "maxLength": 200,
+                    "type": "string"
+                  },
+                  "ISBN": {
+                    "maxLength": 20,
+                    "type": "string"
+                  },
+                  "Edition": {
+                    "maxLength": 50,
+                    "type": "string"
+                  },
+                  "Summary": {
+                    "type": "string"
+                  },
+                  "Language": {
+                    "maxLength": 50,
+                    "type": "string"
+                  },
+                  "PublicationYear": {
+                    "maximum": 9999,
+                    "minimum": 1000,
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "CoverImage": {
+                    "type": "string",
+                    "format": "binary"
+                  },
+                  "PublisherId": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "CategoryId": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "AuthorIds": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                }
+              },
+              "encoding": {
+                "Title": {
+                  "style": "form"
+                },
+                "ISBN": {
+                  "style": "form"
+                },
+                "Edition": {
+                  "style": "form"
+                },
+                "Summary": {
+                  "style": "form"
+                },
+                "Language": {
+                  "style": "form"
+                },
+                "PublicationYear": {
+                  "style": "form"
+                },
+                "CoverImage": {
+                  "style": "form"
+                },
+                "PublisherId": {
+                  "style": "form"
+                },
+                "CategoryId": {
+                  "style": "form"
+                },
+                "AuthorIds": {
+                  "style": "form"
+                }
               }
             }
           }
@@ -241,19 +317,95 @@
         ],
         "requestBody": {
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateBookDto"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateBookDto"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateBookDto"
+                "required": [
+                  "AuthorIds",
+                  "CategoryId",
+                  "ISBN",
+                  "Language",
+                  "PublisherId",
+                  "Title"
+                ],
+                "type": "object",
+                "properties": {
+                  "Title": {
+                    "maxLength": 200,
+                    "type": "string"
+                  },
+                  "ISBN": {
+                    "maxLength": 20,
+                    "type": "string"
+                  },
+                  "Edition": {
+                    "maxLength": 50,
+                    "type": "string"
+                  },
+                  "Summary": {
+                    "type": "string"
+                  },
+                  "Language": {
+                    "maxLength": 50,
+                    "type": "string"
+                  },
+                  "PublicationYear": {
+                    "maximum": 9999,
+                    "minimum": 1000,
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "CoverImage": {
+                    "type": "string",
+                    "format": "binary"
+                  },
+                  "PublisherId": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "CategoryId": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "AuthorIds": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                }
+              },
+              "encoding": {
+                "Title": {
+                  "style": "form"
+                },
+                "ISBN": {
+                  "style": "form"
+                },
+                "Edition": {
+                  "style": "form"
+                },
+                "Summary": {
+                  "style": "form"
+                },
+                "Language": {
+                  "style": "form"
+                },
+                "PublicationYear": {
+                  "style": "form"
+                },
+                "CoverImage": {
+                  "style": "form"
+                },
+                "PublisherId": {
+                  "style": "form"
+                },
+                "CategoryId": {
+                  "style": "form"
+                },
+                "AuthorIds": {
+                  "style": "form"
+                }
               }
             }
           }
@@ -267,6 +419,93 @@
       "delete": {
         "tags": [
           "Books"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Borrowings": {
+      "get": {
+        "tags": [
+          "Borrowings"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Borrowings"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateBorrowingDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateBorrowingDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateBorrowingDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Borrowings/{id}": {
+      "get": {
+        "tags": [
+          "Borrowings"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Borrowings/{id}/return": {
+      "post": {
+        "tags": [
+          "Borrowings"
         ],
         "parameters": [
           {
@@ -392,6 +631,131 @@
       "delete": {
         "tags": [
           "Categories"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Members": {
+      "get": {
+        "tags": [
+          "Members"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Members"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateMemberDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateMemberDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateMemberDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Members/{id}": {
+      "get": {
+        "tags": [
+          "Members"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Members"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateMemberDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateMemberDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateMemberDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Members"
         ],
         "parameters": [
           {
@@ -697,66 +1061,55 @@
         },
         "additionalProperties": false
       },
-      "CreateBookDto": {
+      "CreateBorrowingDto": {
         "required": [
-          "authorIds",
-          "categoryId",
-          "isbn",
-          "language",
-          "publisherId",
-          "title"
+          "bookId",
+          "dueDate",
+          "memberId"
         ],
         "type": "object",
         "properties": {
-          "title": {
-            "maxLength": 200,
+          "bookId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "memberId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "dueDate": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CreateMemberDto": {
+        "required": [
+          "fullName"
+        ],
+        "type": "object",
+        "properties": {
+          "fullName": {
+            "maxLength": 150,
             "minLength": 1,
             "type": "string"
           },
-          "isbn": {
+          "email": {
+            "maxLength": 150,
+            "type": "string",
+            "format": "email",
+            "nullable": true
+          },
+          "phone": {
             "maxLength": 20,
-            "minLength": 1,
-            "type": "string"
-          },
-          "edition": {
-            "maxLength": 50,
             "type": "string",
             "nullable": true
           },
-          "summary": {
+          "address": {
+            "maxLength": 250,
             "type": "string",
             "nullable": true
-          },
-          "language": {
-            "maxLength": 50,
-            "minLength": 1,
-            "type": "string"
-          },
-          "publicationYear": {
-            "maximum": 9999,
-            "minimum": 1000,
-            "type": "integer",
-            "format": "int32"
-          },
-          "coverImage": {
-            "maxLength": 500,
-            "type": "string",
-            "nullable": true
-          },
-          "publisherId": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "categoryId": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "authorIds": {
-            "type": "array",
-            "items": {
-              "type": "integer",
-              "format": "int32"
-            }
           }
         },
         "additionalProperties": false
@@ -840,66 +1193,35 @@
         },
         "additionalProperties": false
       },
-      "UpdateBookDto": {
+      "UpdateMemberDto": {
         "required": [
-          "authorIds",
-          "categoryId",
-          "isbn",
-          "language",
-          "publisherId",
-          "title"
+          "fullName"
         ],
         "type": "object",
         "properties": {
-          "title": {
-            "maxLength": 200,
+          "fullName": {
+            "maxLength": 150,
             "minLength": 1,
             "type": "string"
           },
-          "isbn": {
+          "email": {
+            "maxLength": 150,
+            "type": "string",
+            "format": "email",
+            "nullable": true
+          },
+          "phone": {
             "maxLength": 20,
-            "minLength": 1,
-            "type": "string"
-          },
-          "edition": {
-            "maxLength": 50,
             "type": "string",
             "nullable": true
           },
-          "summary": {
+          "address": {
+            "maxLength": 250,
             "type": "string",
             "nullable": true
           },
-          "language": {
-            "maxLength": 50,
-            "minLength": 1,
-            "type": "string"
-          },
-          "publicationYear": {
-            "maximum": 9999,
-            "minimum": 1000,
-            "type": "integer",
-            "format": "int32"
-          },
-          "coverImage": {
-            "maxLength": 500,
-            "type": "string",
-            "nullable": true
-          },
-          "publisherId": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "categoryId": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "authorIds": {
-            "type": "array",
-            "items": {
-              "type": "integer",
-              "format": "int32"
-            }
+          "isActive": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false

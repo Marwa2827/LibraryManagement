@@ -140,3 +140,4 @@ D:\CODE81\LibraryManagement\LibraryManagement\bin\Debug\net8.0\runtimes\win\lib\
 D:\CODE81\LibraryManagement\LibraryManagement\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Security.Cryptography.ProtectedData.dll
 D:\CODE81\LibraryManagement\LibraryManagement\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Windows.Extensions.dll
 D:\CODE81\LibraryManagement\LibraryManagement\obj\Debug\net8.0\LibraryManagement.sourcelink.json
+D:\CODE81\LibraryManagement\LibraryManagement\bin\Debug\net8.0\LibraryManagement.staticwebassets.runtime.json

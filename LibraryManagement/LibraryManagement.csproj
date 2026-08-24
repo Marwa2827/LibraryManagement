@@ -20,6 +20,7 @@
   <ItemGroup>
     <Folder Include="Middleware\" />
     <Folder Include="Helpers\" />
+    <Folder Include="wwwroot\uploads\books\" />
   </ItemGroup>
 
 </Project>

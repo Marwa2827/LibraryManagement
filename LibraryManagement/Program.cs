@@ -66,12 +66,16 @@ builder.Services
     });
 builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddScoped<IBookService, BookService>();
+builder.Services.AddScoped<IFileService, FileService>();
 builder.Services.AddScoped<IAuthorService, AuthorService>();
 builder.Services.AddScoped<IPublisherService, PublisherService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IMemberService, MemberService>();
+builder.Services.AddScoped<IBorrowingService, BorrowingService>();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddSwaggerGen(options =>
 {
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
@@ -108,6 +112,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+
+app.UseStaticFiles();
 
 app.UseHttpsRedirection();
 

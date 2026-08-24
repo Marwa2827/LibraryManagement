@@ -24,8 +24,7 @@ namespace LibraryManagement.DTOs.Books
         [Range(1000, 9999)]
         public int PublicationYear { get; set; }
 
-        [MaxLength(500)]
-        public string? CoverImage { get; set; }
+        public IFormFile? CoverImage { get; set; }
 
         [Required]
         public int PublisherId { get; set; }

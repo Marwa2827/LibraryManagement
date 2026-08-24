@@ -9,85 +9,98 @@ namespace LibraryManagement.Services.Implementations
     public class BookService : IBookService
     {
         private readonly ApplicationDbContext _context;
+        private readonly IFileService _fileService;
 
-        public BookService(ApplicationDbContext context)
+        public BookService(ApplicationDbContext context,
+    IFileService fileService)
         {
             _context = context;
+            _fileService = fileService;
         }
 
         public async Task<List<BookResponseDto>> GetAllAsync()
         {
-            return await _context.Books
+            var books = await _context.Books
                 .AsNoTracking()
                 .Include(b => b.Publisher)
                 .Include(b => b.Category)
                 .Include(b => b.BookAuthors)
                     .ThenInclude(ba => ba.Author)
-                .Select(b => new BookResponseDto
-                {
-                    Id = b.Id,
-                    Title = b.Title,
-                    ISBN = b.ISBN,
-                    Edition = b.Edition,
-                    Summary = b.Summary,
-                    Language = b.Language,
-                    PublicationYear = b.PublicationYear,
-                    CoverImage = b.CoverImage,
-                    Status = b.Status,
-
-                    PublisherId = b.PublisherId,
-                    PublisherName = b.Publisher.Name,
-
-                    CategoryId = b.CategoryId,
-                    CategoryName = b.Category.Name,
-
-                    AuthorIds = b.BookAuthors
-                        .Select(ba => ba.AuthorId)
-                        .ToList(),
-
-                    AuthorNames = b.BookAuthors
-                        .Select(ba => ba.Author.Name)
-                        .ToList()
-                })
                 .ToListAsync();
+
+            return books.Select(b => new BookResponseDto
+            {
+                Id = b.Id,
+                Title = b.Title,
+                ISBN = b.ISBN,
+                Edition = b.Edition,
+                Summary = b.Summary,
+                Language = b.Language,
+                PublicationYear = b.PublicationYear,
+
+                CoverImageUrl = _fileService.GetBookCoverUrl(b.CoverImage),
+
+                Status = b.Status,
+
+                PublisherId = b.PublisherId,
+                PublisherName = b.Publisher.Name,
+
+                CategoryId = b.CategoryId,
+                CategoryName = b.Category.Name,
+
+                AuthorIds = b.BookAuthors
+                    .Select(ba => ba.AuthorId)
+                    .ToList(),
+
+                AuthorNames = b.BookAuthors
+                    .Select(ba => ba.Author.Name)
+                    .ToList()
+            }).ToList();
         }
 
         public async Task<BookResponseDto?> GetByIdAsync(int id)
         {
-            return await _context.Books
+            var book = await _context.Books
                 .AsNoTracking()
                 .Include(b => b.Publisher)
                 .Include(b => b.Category)
                 .Include(b => b.BookAuthors)
                     .ThenInclude(ba => ba.Author)
-                .Where(b => b.Id == id)
-                .Select(b => new BookResponseDto
-                {
-                    Id = b.Id,
-                    Title = b.Title,
-                    ISBN = b.ISBN,
-                    Edition = b.Edition,
-                    Summary = b.Summary,
-                    Language = b.Language,
-                    PublicationYear = b.PublicationYear,
-                    CoverImage = b.CoverImage,
-                    Status = b.Status,
+                .FirstOrDefaultAsync(b => b.Id == id);
 
-                    PublisherId = b.PublisherId,
-                    PublisherName = b.Publisher.Name,
+            if (book == null)
+            {
+                return null;
+            }
 
-                    CategoryId = b.CategoryId,
-                    CategoryName = b.Category.Name,
+            return new BookResponseDto
+            {
+                Id = book.Id,
+                Title = book.Title,
+                ISBN = book.ISBN,
+                Edition = book.Edition,
+                Summary = book.Summary,
+                Language = book.Language,
+                PublicationYear = book.PublicationYear,
 
-                    AuthorIds = b.BookAuthors
-                        .Select(ba => ba.AuthorId)
-                        .ToList(),
+                CoverImageUrl = _fileService.GetBookCoverUrl(book.CoverImage),
 
-                    AuthorNames = b.BookAuthors
-                        .Select(ba => ba.Author.Name)
-                        .ToList()
-                })
-                .FirstOrDefaultAsync();
+                Status = book.Status,
+
+                PublisherId = book.PublisherId,
+                PublisherName = book.Publisher.Name,
+
+                CategoryId = book.CategoryId,
+                CategoryName = book.Category.Name,
+
+                AuthorIds = book.BookAuthors
+                    .Select(ba => ba.AuthorId)
+                    .ToList(),
+
+                AuthorNames = book.BookAuthors
+                    .Select(ba => ba.Author.Name)
+                    .ToList()
+            };
         }
 
         public async Task<(bool Success, string? Error, BookResponseDto? Book)>
@@ -138,6 +151,15 @@ namespace LibraryManagement.Services.Implementations
                 return (false, "One or more authors were not found.", null);
             }
 
+            string? coverFileName = null;
+
+            if (dto.CoverImage != null)
+            {
+                coverFileName =
+                    await _fileService.SaveBookCoverAsync(
+                        dto.CoverImage);
+            }
+
             var book = new Book
             {
                 Title = dto.Title,
@@ -146,7 +168,7 @@ namespace LibraryManagement.Services.Implementations
                 Summary = dto.Summary,
                 Language = dto.Language,
                 PublicationYear = dto.PublicationYear,
-                CoverImage = dto.CoverImage,
+                CoverImage = coverFileName,
                 PublisherId = dto.PublisherId,
                 CategoryId = dto.CategoryId
             };
@@ -169,7 +191,7 @@ namespace LibraryManagement.Services.Implementations
         }
 
         public async Task<(bool Success, string? Error)>
-            UpdateAsync(int id, UpdateBookDto dto)
+    UpdateAsync(int id, UpdateBookDto dto)
         {
             var book = await _context.Books
                 .Include(b => b.BookAuthors)
@@ -180,7 +202,6 @@ namespace LibraryManagement.Services.Implementations
                 return (false, "Book not found.");
             }
 
-            // Check ISBN uniqueness
             var isbnExists = await _context.Books
                 .AnyAsync(b => b.ISBN == dto.ISBN && b.Id != id);
 
@@ -224,15 +245,27 @@ namespace LibraryManagement.Services.Implementations
                 return (false, "One or more authors were not found.");
             }
 
+            // Keep old cover image
+            var oldCoverImage = book.CoverImage;
+
+            // Update book data
             book.Title = dto.Title;
             book.ISBN = dto.ISBN;
             book.Edition = dto.Edition;
             book.Summary = dto.Summary;
             book.Language = dto.Language;
             book.PublicationYear = dto.PublicationYear;
-            book.CoverImage = dto.CoverImage;
             book.PublisherId = dto.PublisherId;
             book.CategoryId = dto.CategoryId;
+
+            // Update cover only if a new image was uploaded
+            if (dto.CoverImage != null)
+            {
+                var newCoverImage =
+                    await _fileService.SaveBookCoverAsync(dto.CoverImage);
+
+                book.CoverImage = newCoverImage;
+            }
 
             // Update Authors
             _context.BookAuthors.RemoveRange(book.BookAuthors);
@@ -248,11 +281,18 @@ namespace LibraryManagement.Services.Implementations
 
             await _context.SaveChangesAsync();
 
+            // Delete old image after successful DB update
+            if (dto.CoverImage != null &&
+                !string.IsNullOrWhiteSpace(oldCoverImage))
+            {
+                _fileService.DeleteBookCover(oldCoverImage);
+            }
+
             return (true, null);
         }
 
         public async Task<(bool Success, string? Error)>
-            DeleteAsync(int id)
+    DeleteAsync(int id)
         {
             var book = await _context.Books
                 .FirstOrDefaultAsync(b => b.Id == id);
@@ -262,7 +302,6 @@ namespace LibraryManagement.Services.Implementations
                 return (false, "Book not found.");
             }
 
-            // Don't allow deleting a borrowed book
             if (book.Status == Models.Enums.BookStatus.Borrowed)
             {
                 return (false, "Cannot delete a borrowed book.");
@@ -278,9 +317,16 @@ namespace LibraryManagement.Services.Implementations
                     "Cannot delete a book with borrowing history.");
             }
 
+            var coverImage = book.CoverImage;
+
             _context.Books.Remove(book);
 
             await _context.SaveChangesAsync();
+
+            if (!string.IsNullOrWhiteSpace(coverImage))
+            {
+                _fileService.DeleteBookCover(coverImage);
+            }
 
             return (true, null);
         }

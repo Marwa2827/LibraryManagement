@@ -47,7 +47,7 @@ namespace LibraryManagement.Controllers
         [HttpPost]
         [Authorize(Roles = "Administrator,Librarian")]
         public async Task<IActionResult> Create(
-            [FromBody] CreateBookDto dto)
+            [FromForm] CreateBookDto dto)
         {
             var result = await _bookService.CreateAsync(dto);
 
@@ -70,7 +70,7 @@ namespace LibraryManagement.Controllers
         [Authorize(Roles = "Administrator,Librarian")]
         public async Task<IActionResult> Update(
             int id,
-            [FromBody] UpdateBookDto dto)
+            [FromForm] UpdateBookDto dto)
         {
             var result = await _bookService.UpdateAsync(id, dto);
 
